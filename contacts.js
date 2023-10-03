@@ -38,14 +38,14 @@ function listContacts() {
             return;
         }
         const contacts = JSON.parse(data);
-        const contact = contacts.find(c=>c.id === contactId);     
         
-        if (contact){
-            delete contact;
+        contacts.map(contact => {
+            if(contact.id === contactId){
+                delete contact;
+                return contact
+            }
             console.log(contact)
-        }else{
-            console.log(`Contact with this id: ${contactId} not found`);
-        }
+        })
         
     })
   }

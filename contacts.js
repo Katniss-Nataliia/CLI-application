@@ -1,5 +1,7 @@
+const { error } = require('console');
 const fs = require('fs');
 const path = require('path');
+const { constrainedMemory } = require('process');
 
 const contactsPath = path.join(__dirname, 'db', 'contacts.json');
 
@@ -39,15 +41,16 @@ function listContacts() {
         }
         const contacts = JSON.parse(data);
         
-        contacts.map(contact => {
-            if(contact.id === contactId){
-                delete contact;
-                return contact
+        const contact = contacts.filter(c=>c.id === contactId);
+        fs.writeFile(contactsPath, JSON.stringify(contact, null, 2), err => {
+            if(err){
+                console.error(err);
             }
-            console.log(contact)
+            console.log(`contact with ID:${contactId} removed successfully`)
         })
-        
     })
+
+
   }
   
   function addContact(name, email, phone) {
@@ -61,6 +64,13 @@ function listContacts() {
 
         contacts.push(newContact);
         console.log(contacts)
+    fs.writeFile(contactsPath, JSON.stringify(contacts), err=>{
+        if(err){
+            console.log(err)
+        }
+        console.log('The file has been saved!');
+
+    })
     })
   }
 

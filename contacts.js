@@ -2,7 +2,7 @@ const { error } = require('console');
 const fs = require('fs');
 const path = require('path');
 const { constrainedMemory } = require('process');
-const {nanoid} = import('nanoid');
+const {v4} = require('uuid');
 
 
 
@@ -63,8 +63,7 @@ function listContacts() {
             return;
         }
         const contacts = JSON.parse(data);
-        const id = nanoid()
-        const newContact = {id, name, email, phone};
+        const newContact = {id:v4(), name, email, phone};
         
         
         contacts.push(newContact);

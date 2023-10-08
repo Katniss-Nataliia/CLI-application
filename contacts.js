@@ -2,6 +2,9 @@ const { error } = require('console');
 const fs = require('fs');
 const path = require('path');
 const { constrainedMemory } = require('process');
+const {nanoid} = import('nanoid');
+
+
 
 const contactsPath = path.join(__dirname, 'db', 'contacts.json');
 
@@ -41,7 +44,7 @@ function listContacts() {
         }
         const contacts = JSON.parse(data);
         
-        const contact = contacts.filter(c=>c.id === contactId);
+        const contact = contacts.filter(c=>c.id !== contactId);
         fs.writeFile(contactsPath, JSON.stringify(contact, null, 2), err => {
             if(err){
                 console.error(err);
@@ -53,21 +56,24 @@ function listContacts() {
 
   }
   
-  function addContact(name, email, phone) {
+  function addContact( name, email, phone) {
     fs.readFile(contactsPath, 'utf-8', (err, data)=>{
         if(err){
             console.err(err);
             return;
         }
         const contacts = JSON.parse(data);
-        const newContact = {name, email, phone};
-
+        const id = nanoid()
+        const newContact = {id, name, email, phone};
+        
+        
         contacts.push(newContact);
         console.log(contacts)
     fs.writeFile(contactsPath, JSON.stringify(contacts), err=>{
         if(err){
             console.log(err)
         }
+        
         console.log('The file has been saved!');
 
     })
